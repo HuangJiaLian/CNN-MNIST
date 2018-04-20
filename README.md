@@ -1,2 +1,5 @@
 # CNN-MNIST
-Use CNN to recogo
+Use CNN to recognise hand-writting digits.
+
+
+
