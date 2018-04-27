@@ -1,11 +1,11 @@
 # CNN-MNIST
 使用`卷积神经网络`实现手写数字识别
 
-<img src="./src/pic/0.png" width="50%"><img src="./src/pic/1.png" width="50%">
-<img src="./src/pic/2.png" width="50%"><img src="./src/pic/3.png" width="50%">
-<img src="./src/pic/4.png" width="50%"><img src="./src/pic/5.png" width="50%">
-<img src="./src/pic/6.png" width="50%"><img src="./src/pic/7.png" width="50%">
-<img src="./src/pic/8.png" width="50%"><img src="./src/pic/9.png" width="50%">
+<img src="./src/pic/0.png" width="20%"><img src="./src/pic/1.png" width="20%"><img src="./src/pic/2.png" width="20%"><img src="./src/pic/3.png" width="20%"><img src="./src/pic/4.png" width="20%">
+
+<img src="./src/pic/5.png" width="20%"><img src="./src/pic/6.png" width="20%"><img src="./src/pic/7.png" width="20%"><img src="./src/pic/8.png" width="20%"><img src="./src/pic/9.png" width="20%">
+
+
 
 ### 快速使用手册:
 
