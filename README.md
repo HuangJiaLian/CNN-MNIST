@@ -3,7 +3,7 @@
 
 <img src="./src/pic/0.png" width="10%"><img src="./src/pic/1.png" width="10%"><img src="./src/pic/2.png" width="10%"><img src="./src/pic/3.png" width="10%"><img src="./src/pic/4.png" width="10%"><img src="./src/pic/5.png" width="10%"><img src="./src/pic/6.png" width="10%"><img src="./src/pic/7.png" width="10%"><img src="./src/pic/8.png" width="10%"><img src="./src/pic/9.png" width="10%">
 
----
+
 
 ### 快速使用手册:
 
@@ -11,13 +11,13 @@
 2. 创建环境：`conda env create -f environment.yaml`
 3. 运行测试程序: `python cnn_app.py`
 
----
+
 
 ### 网络结构：
 
 `输入`->`卷积层1` ->`MaxPooling1`->`卷积层2`->`MaxPooling2`->`一个中间层500个神经元全连接网络`->`输出`
 
----
+
 
 ### 训练过程: `cnn_mnist_train.py`
 
@@ -30,7 +30,7 @@
 - 训练收敛过程的收敛速度慢
 - 精确度：收敛到0.98左右(全全连接曾中间节点为500个，还可以增加)
 
----
+
 
 ### 模型的使用:`cnn_app.py`
 
@@ -41,7 +41,7 @@
 - 鼠标在做图板上写下待识别的数字
 - 按下`s`键保存图片，终端显示识别出的数字
 
----
+
 
 ### 运行环境:`environment.yaml`
 
@@ -51,7 +51,7 @@
 conda env create -f environment.yaml
 ```
 
----
+
 
 ### 待做事项:
 
