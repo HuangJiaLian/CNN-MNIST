@@ -19,7 +19,7 @@ MODEL_SAVE_PATH = './model/'
 MODEL_NAME='cnn_mnist_model' 
 
 
-fc_node = 500
+fc_node = 1024 
 
 # 初始化权值
 def weight_variable(shape):

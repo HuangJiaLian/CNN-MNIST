@@ -103,7 +103,7 @@ def max_pool_2x2(x):
 # 加载训练好的模型
 # 使用模型之前要重新搭建和训练模型完全一样的网络结构
 def restore_model(testPicArr):
-    fc_node = 500
+    fc_node = 1024
     with tf.Graph().as_default() as tg: # 一定要有这句，不然只能正确运行一次(现在我也不知道原因)
         # 重新搭建网络
         
