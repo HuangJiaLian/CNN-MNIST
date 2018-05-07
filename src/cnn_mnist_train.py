@@ -52,6 +52,7 @@ def max_pool_2x2(x):
     # `strides = [1, stride, stride, 1]`.
     return tf.nn.max_pool(x,ksize=[1,2,2,1],strides=[1,2,2,1],padding='SAME')
 
+
 # 定义两个placeholder
 x = tf.placeholder(tf.float32,[None, 784]) # 第一个数字代表行，784代表有784列
 y = tf.placeholder(tf.float32,[None, 10])  # 输出：标签
@@ -59,12 +60,13 @@ y = tf.placeholder(tf.float32,[None, 10])  # 输出：标签
 # 改变x为4D: [batch, in_height, in_width, in_channels]
 x_image = tf.reshape(x, [-1,28,28,1]) # -1：现在不关心，后续会变成100
 
+
 # 初始化第一个卷积层
 # 卷积核的形态：5*5*1
 # 卷积核的个数：kernel_num1 (这个数字是可以尝试出来的是吧？)
 # 用32个卷积核去对一个平面/通道采样，最后会得到32个卷积特征平面
-W_conv1 = weight_variable([5,5,1,kernel_num1]) 
-b_conv1 = bias_variablle([kernel_num1]) 
+W_conv1 = weight_variable([5,5,1,kernel_num1])
+b_conv1 = bias_variablle([kernel_num1])
 
 # 把x_image和卷积向量进行卷积，再加上偏置，然后应用于relu激活函数
 h_conv1 = tf.nn.relu(conv2d(x_image, W_conv1) + b_conv1)
@@ -101,22 +103,16 @@ h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
 keep_prob = tf.placeholder(tf.float32)
 h_fc1_drop = tf.nn.dropout(h_fc1,keep_prob)
 
-# # 初始化第二个全连接层
-# W_fc2 = weight_variable([h1_node,10])
-# b_fc2 = bias_variablle([10])
-
-# # 计算输出
-# prediction = tf.nn.softmax(tf.matmul(h_fc1_drop,W_fc2) + b_fc2)
 
 # 初始化第二个全连接层
 W_fc2 = weight_variable([h1_node,h2_node])
 b_fc2 = bias_variablle([h2_node])
 
-# 求第2个全连接层的输出
+# 求第二个全连接层的输出
 h_fc2 = tf.nn.relu(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
 h_fc2_drop = tf.nn.dropout(h_fc2,keep_prob)
 
-# 初始化第3个全连接层
+# 初始化第三个全连接层
 W_fc3 = weight_variable([h2_node,10])
 b_fc3 = bias_variablle([10])
 
@@ -128,8 +124,8 @@ prediction = tf.nn.softmax(tf.matmul(h_fc2_drop,W_fc3) + b_fc3)
 cross_enropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y,logits=prediction))
 
 # 使用优化器优化
-# train_step = tf.train.AdadeltaOptimizer(1e-2).minimize(cross_enropy)
-train_step = tf.train.GradientDescentOptimizer(0.01).minimize(cross_enropy)
+train_step = tf.train.AdadeltaOptimizer(1e-2).minimize(cross_enropy)
+# train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_enropy)
 
 # 结果存放在一个布尔列表中
 # argmax返回一维张量中最大值所在位置

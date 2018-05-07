@@ -59,6 +59,16 @@ conda env create -f environment.yaml
 
   后面全连接层有1024个中间节点，训练显示准确率有98%，但是效果还是不好。我估计是图像和MNIST的图片数据不一样。
 
+- [x] 增加卷积核的数目第一第二层分别为64和128个
+
 - [ ] 添加`Tensorboad`,可视化神经网络
+
+
+
+### 疑问：
+
+1. 为什么有时候刚开始利用`GradientDescentOptimizer`没有办法降低准确度，而利用`AdadeltaOptimizer`就可以？
+2. 为什么利用`AdadeltaOptimizer`后中断程序，改为`GradientDescentOptimizer`继续训练，训练可以继续，而反过来却不行？
+3. 为什么训练时测试的准确率可以达到`98%`，但是利用`cnn_app.py`去应用时效果还是不是很理想，感觉与`98%`的准确率不是很符合？
 
 ---
