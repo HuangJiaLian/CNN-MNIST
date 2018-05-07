@@ -18,9 +18,13 @@ max_steps = 50000
 MODEL_SAVE_PATH = './model/'
 MODEL_NAME='cnn_mnist_model' 
 
+kernel_num1 = 64
+kernel_num2 = 128
 
-fc_node = 1024 
+h1_node = 1024 
+h2_node = 1024
 
+KEEP = 0.95
 # 初始化权值
 def weight_variable(shape):
     initial = tf.truncated_normal(shape, stddev=0.1)
@@ -57,22 +61,22 @@ x_image = tf.reshape(x, [-1,28,28,1]) # -1：现在不关心，后续会变成10
 
 # 初始化第一个卷积层
 # 卷积核的形态：5*5*1
-# 卷积核的个数：32 (这个数字是可以尝试出来的是吧？)
+# 卷积核的个数：kernel_num1 (这个数字是可以尝试出来的是吧？)
 # 用32个卷积核去对一个平面/通道采样，最后会得到32个卷积特征平面
-W_conv1 = weight_variable([5,5,1,32]) 
-b_conv1 = bias_variablle([32]) 
+W_conv1 = weight_variable([5,5,1,kernel_num1]) 
+b_conv1 = bias_variablle([kernel_num1]) 
 
 # 把x_image和卷积向量进行卷积，再加上偏置，然后应用于relu激活函数
 h_conv1 = tf.nn.relu(conv2d(x_image, W_conv1) + b_conv1)
 h_pool1 = max_pool_2x2(h_conv1)
 
 # 初始化第二个卷积层
-# 卷积核的形态：5*5*32 
-# 卷积核的个数：64
+# 卷积核的形态：5*5*kernel_num1 
+# 卷积核的个数：kernel_num2
 # 使用64个卷积核对32个平面提取特征；得到64x32个特征平面 (他说是64) ??
 # 回答：的确是64个，卷的时候是考虑了深度的，卷积核在这里考虑成一个cube(立方体)
-W_conv2 = weight_variable([5,5,32,64])
-b_conv2 = bias_variablle([64]) # 一个卷积核要一个偏置值
+W_conv2 = weight_variable([5,5,kernel_num1,kernel_num2])
+b_conv2 = bias_variablle([kernel_num2]) # 一个卷积核要一个偏置值
 
 # 把h_pool1和卷积向量进行卷积，再加上偏置，然后应用于relu激活函数
 h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2) + b_conv2)
@@ -83,11 +87,11 @@ h_pool2 = max_pool_2x2(h_conv2)
 # 通过上面的操作得到64张7x7的平面
 
 # 初始化第一个全连接层的权值
-W_fc1 = weight_variable([7*7*64,fc_node]) # 上一层有7x7x64个神经元，定义全连接层有1024个神经元
-b_fc1 = bias_variablle([fc_node]) # 1024个节点
+W_fc1 = weight_variable([7*7*kernel_num2,h1_node]) # 上一层有7x7x64个神经元，定义全连接层有1024个神经元
+b_fc1 = bias_variablle([h1_node]) # 1024个节点
 
 # 把池化层的输出扁平化为1维
-h_pool2_flat = tf.reshape(h_pool2,[-1,7*7*64]) # 4D->2D
+h_pool2_flat = tf.reshape(h_pool2,[-1,7*7*kernel_num2]) # 4D->2D
 # 求第一个全连接层的输出
 h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
 
@@ -97,19 +101,35 @@ h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
 keep_prob = tf.placeholder(tf.float32)
 h_fc1_drop = tf.nn.dropout(h_fc1,keep_prob)
 
+# # 初始化第二个全连接层
+# W_fc2 = weight_variable([h1_node,10])
+# b_fc2 = bias_variablle([10])
+
+# # 计算输出
+# prediction = tf.nn.softmax(tf.matmul(h_fc1_drop,W_fc2) + b_fc2)
+
 # 初始化第二个全连接层
-W_fc2 = weight_variable([fc_node,10])
-b_fc2 = bias_variablle([10])
+W_fc2 = weight_variable([h1_node,h2_node])
+b_fc2 = bias_variablle([h2_node])
+
+# 求第2个全连接层的输出
+h_fc2 = tf.nn.relu(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)
+h_fc2_drop = tf.nn.dropout(h_fc2,keep_prob)
+
+# 初始化第3个全连接层
+W_fc3 = weight_variable([h2_node,10])
+b_fc3 = bias_variablle([10])
 
 # 计算输出
-prediction = tf.nn.softmax(tf.matmul(h_fc1_drop,W_fc2) + b_fc2)
+prediction = tf.nn.softmax(tf.matmul(h_fc2_drop,W_fc3) + b_fc3)
+
 
 # 交叉熵代价函数
 cross_enropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y,logits=prediction))
 
 # 使用优化器优化
-# train_step = tf.train.AdadeltaOptimizer(1e-4).minimize(cross_enropy)
-train_step = tf.train.GradientDescentOptimizer(0.05).minimize(cross_enropy)
+# train_step = tf.train.AdadeltaOptimizer(1e-2).minimize(cross_enropy)
+train_step = tf.train.GradientDescentOptimizer(0.01).minimize(cross_enropy)
 
 # 结果存放在一个布尔列表中
 # argmax返回一维张量中最大值所在位置
