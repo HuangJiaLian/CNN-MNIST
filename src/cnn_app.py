@@ -54,7 +54,7 @@ def pre_pic(picName):
     img = Image.open(picName)
     reIm = img.resize((28,28), True) # 将1D存储的数据改变成2D
     im_arr = np.array(reIm.convert('L'))  # 将PIL.Image.Image格式转化为numpy.ndarray方便显示
-    # cv2.imshow("Little",im_arr) # 显示缩小后的图像
+    cv2.imshow("Little",im_arr) # 显示缩小后的图像
     
     # 由于MNIST中1对应纯黑，0对应纯白
     # 和常规的图片0对应纯黑正好相反
