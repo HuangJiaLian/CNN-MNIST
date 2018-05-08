@@ -18,8 +18,8 @@ max_steps = 50000
 MODEL_SAVE_PATH = './model/'
 MODEL_NAME='cnn_mnist_model' 
 
-kernel_num1 = 64
-kernel_num2 = 128
+kernel_num1 = 32
+kernel_num2 = 64
 
 h1_node = 1024 
 h2_node = 1024
@@ -124,7 +124,7 @@ prediction = tf.nn.softmax(tf.matmul(h_fc2_drop,W_fc3) + b_fc3)
 cross_enropy = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=y,logits=prediction))
 
 # 使用优化器优化
-train_step = tf.train.AdadeltaOptimizer(1e-2).minimize(cross_enropy)
+train_step = tf.train.AdadeltaOptimizer(1e-4).minimize(cross_enropy)
 # train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_enropy)
 
 # 结果存放在一个布尔列表中
@@ -184,7 +184,7 @@ with tf.Session() as sess:
     for i in range(max_steps):
         batch_xs, batch_ys = mnist.train.next_batch(batch_size)
         sess.run(train_step, feed_dict={x:batch_xs, y:batch_ys, keep_prob:0.95})
-        if i % 10 == 0:
+        if i % 500 == 0:
             acc = sess.run(accuracy, feed_dict={x:mnist.test.images,y:mnist.test.labels,keep_prob:1.0})
             print("Iter " + str(i) + ", Testing Accuracy " + str(acc))
             
